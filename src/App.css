@@ -1,7 +1,6 @@
-.tooltip{
-    position: absolute;
-    text-align: center;
-    padding: 5px;
-    background-color: black;
-    color: blanchedalmond;
+.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 5px;
+  color: blanchedalmond;
 }

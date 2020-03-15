@@ -1,16 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as d3 from "d3";
 
-class Chart1 extends React.Component {
-  constructor() {
-    super();
-    this.draw = this.draw.bind();
-  }
-  myRef = React.createRef();
-  componentDidMount() {
-    this.draw();
-  }
-  draw() {
+const Chart1 = () => {
+  useEffect(() => {
+    draw();
+  }, []);
+
+  const draw = () => {
     const dataSet = [
       { url: "www.a.com", count: 2321 },
       { url: "www.b.com", count: 1721 },
@@ -45,6 +41,11 @@ class Chart1 extends React.Component {
       .style("background-color", "gray");
 
     var layer1 = chart.append("g");
+    var tooltip = d3
+      .select("#graph")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
     layer1
       .selectAll("rect")
       .data(dataSet)
@@ -61,22 +62,30 @@ class Chart1 extends React.Component {
       .attr("height", (data, index) => {
         return yScale(data.count);
       })
-      .on("mouseover", (data, index) => {
+      .on("mouseover", function(d) {
         d3.select(this)
           .transition()
-          .duration(300)
-          .style("fill", "yellow");
+          .duration(200)
+          .style("fill", "orange");
+        tooltip
+          .transition()
+          .duration(100)
+          .style("opacity", 1);
+        tooltip.html(d.url + " (" + d.count + ")");
       })
-      .on("mouseout", (data, index) => {
+      .on("mouseout", function(d) {
         d3.select(this)
           .transition()
           .duration(300)
-          .style("fill", "blue");
+          .style("fill", barColor);
+        tooltip
+          .transition()
+          .duration(100)
+          .style("opacity", 0);
       });
-  }
-  render() {
-    return <p id="graph" className="d-flex justify-content-center"></p>;
-  }
-}
+  };
+
+  return <p id="graph" className="d-flex justify-content-center"></p>;
+};
 
 export default Chart1;
